@@ -15,8 +15,6 @@ collection_list = []
 with open("./collection_list.json", 'r') as jsonReader:
   collection_list = json.load(jsonReader)
 
-for item in collection_list:
-	print item
 #Attempt to connect to contentDM server
 
 #Get username, password for contentDM domain
@@ -61,3 +59,11 @@ while(current_date != end_date):
   else:
     current_date = str(int(current_date) + 1)
   pass
+
+list_of_urls = []
+for coll_text in collection_list:
+  for date_text in list_of_dates:
+    list_of_urls.append(url.format(coll_text, date_text))
+
+for url in list_of_urls:
+  print(url)
