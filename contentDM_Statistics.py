@@ -32,6 +32,32 @@ url = "https://collections.carli.illinois.edu:8443/cdm4/admin/admin_jscripts/adm
 #url{1} =: date to draw report, in form of YYYYMM
 
 # end - start => 201812 - 201605 = 000207
-# 
-#
-#
+# start_date[0:3] => 2016
+year_difference = int(end_date[0:4]) - int(start_date[0:4])
+year_to_months = year_difference * 12
+# end_date[0:3] => 2018
+# _SUBTRACT_ => 2
+# _MULTIPLY_ => 2 X 12 = 24
+month_difference =  int(end_date[4:6]) - int(start_date[4:6])
+# start_date[4:6] => 05
+# end_date[4:6] => 12
+# _SUBTRACT_ => 7
+# _ADD_ => 24 + 7 = 31
+total_months = year_to_months + month_difference
+# Total of 31 Months
+
+# Get list of months to take
+# Start_date  = 201605
+# Start_date + 1 = 201606
+# Start_date + 5 = 201610
+
+list_of_dates = []
+current_date = start_date
+while(current_date != end_date):
+  list_of_dates.append(current_date)
+  if(int(current_date[4:6]) + 1 > 12):
+    new_year = int(current_date[0:4]) + 1
+    current_date = str(new_year) + "01"
+  else:
+    current_date = str(int(current_date) + 1)
+  pass
