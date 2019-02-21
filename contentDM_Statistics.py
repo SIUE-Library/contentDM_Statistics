@@ -7,12 +7,13 @@
 #Dependencies
 import json
 import csv
-#import requests
+import time
+import requests
 from getpass import getpass
 
 collection_list = []
 #Look for external file containing contentDM collection list
-with open("./collection_list.json", 'r') as jsonReader:
+with open("./test_collection_list.json", 'r') as jsonReader:
   collection_list = json.load(jsonReader)
 
 #Attempt to connect to contentDM server
@@ -51,7 +52,7 @@ total_months = year_to_months + month_difference
 
 list_of_dates = []
 current_date = start_date
-while(current_date != end_date):
+while(current_date <= end_date):
   list_of_dates.append(current_date)
   if(int(current_date[4:6]) + 1 > 12):
     new_year = int(current_date[0:4]) + 1
@@ -64,6 +65,19 @@ list_of_urls = []
 for coll_text in collection_list:
   for date_text in list_of_dates:
     list_of_urls.append(url.format(coll_text, date_text))
-
-for url in list_of_urls:
-  print(url)
+with requests.Session() as session:
+  payload = {
+    'username': user_name,
+    'pass': user_pass
+  }
+  post = session.post(list_of_urls[0], data=payload)
+  for url in list_of_urls:
+    try:
+      server_response = session.get(url, data=payload)
+      #server_response = url
+      print(server_response.content)
+      time.sleep(0.1)
+    except ConnectionError:
+      print("There was a connection error trying to get: " + url)
+    except:
+      print("There was an error trying to get: " + url)
